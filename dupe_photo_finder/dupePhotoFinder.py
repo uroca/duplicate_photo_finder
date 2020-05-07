@@ -9,9 +9,9 @@ def main():
     print(folders_to_scan)
     # error if folder doesn't exist
     extensions_sought = ['.jpg', '.nef', '.raf']
-    all_files_found = localSys.scan_for_file_extensions(folders_to_scan, extensions_sought)
-    matching.find_duplicates(all_files_found)
-    print(len(all_files_found))
+    local_files_found = localSys.scan_for_file_extensions(folders_to_scan, extensions_sought)
+    duplicates_found = matching.find_duplicates(local_files_found)
+    print(len(duplicates_found))
 
 
 def processing_time():

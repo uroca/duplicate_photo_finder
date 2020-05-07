@@ -1,5 +1,5 @@
 import os
-from .localFile import LocalFile
+from .fileMetadata import FileMetadata
 import hashlib
 
 
@@ -12,7 +12,7 @@ def scan_for_file_extensions(folder_paths, extensions):
                 if file_extension in extensions:
                     file_path = os.path.join(dirpath, x)
                     file_hash = get_file_hash(file_path)
-                    files_found.append(LocalFile(file_path, file_hash, file_extension))
+                    files_found.append(FileMetadata(file_path, file_hash, file_extension))
                     print('Files found matching the extensions: ' + str(len(files_found)))
     return files_found
 
