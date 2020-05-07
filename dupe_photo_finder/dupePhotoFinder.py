@@ -1,5 +1,6 @@
 import sys
 from utils import localSys as localSys
+from utils import printDuplicates
 import matching
 import time
 
@@ -11,7 +12,7 @@ def main():
     extensions_sought = ['.jpg', '.nef', '.raf']
     local_files_found = localSys.scan_for_file_extensions(folders_to_scan, extensions_sought)
     duplicates_found = matching.find_duplicates(local_files_found)
-    print(len(duplicates_found))
+    printDuplicates.print_terminal(duplicates_found)
 
 
 def processing_time():
