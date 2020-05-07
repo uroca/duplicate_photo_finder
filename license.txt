@@ -1,12 +1,12 @@
 License
 -------
 
-This document does NOT provide you with a license to use,
-modify, copyright or patent this software or the code that 
+This document does NOT provide you with a license to
+copyright or patent this software or the code that
 was used to create it.  Furthermore, the license does NOT 
-provide you with a license to distribute to third 
-parties, sell to third parties or rent to third parties 
-this software or any of the code that was used to create it.
+provide you with a license to distribute this software or
+the code used to create it, in part or as a whole, to sell,
+rent or provide a commercial service.
 
 The original creator retains all copyright to this software 
 and the code that was used to create it.
