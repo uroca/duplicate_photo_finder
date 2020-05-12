@@ -1,6 +1,9 @@
-def request_search(directories_list, extensions_list):
+import model
+
+
+def request_search(directories_list, extensions_list = ['.jpg', '.nef', '.raf']):
     validate_request_not_empty(directories_list)
-    # add call to initiate dupe_photo search
+    return model.find_duplicate_files_in_directories(directories_list, extensions_list)
 
 
 def validate_request_not_empty(directories_list):
