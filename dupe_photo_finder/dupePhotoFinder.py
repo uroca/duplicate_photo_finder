@@ -1,5 +1,5 @@
 import sys
-from utils import localSys as localSys
+from utils import localSys
 from utils import printDuplicates
 import matching
 import time
@@ -8,7 +8,7 @@ import time
 def main():
     folders_to_scan = sys.argv[1:]
     print(folders_to_scan)
-    # error if folder doesn't exist
+    localSys.all_folders_exist(folders_to_scan)
     extensions_sought = ['.jpg', '.nef', '.raf']
     local_files_found = localSys.scan_for_file_extensions(folders_to_scan, extensions_sought)
     duplicates_found = matching.find_duplicates(local_files_found)

@@ -26,3 +26,13 @@ def get_file_hash(file_path):
             break
         md5.update(block)
     return md5.hexdigest()
+
+
+def all_folders_exist(list_of_folder_paths):
+    for x in list_of_folder_paths:
+        folder_exists(x)
+
+
+def folder_exists(folder_path):
+    if not os.path.isdir(folder_path):
+        raise ValueError("This folder doesn't exist, it can't be scanned for duplicate photos: " + folder_path)
