@@ -3,4 +3,4 @@ import controller
 
 
 if __name__ == "__main__":
-    controller.request_search(sys.argv[1:])
+    controller.Controller()
