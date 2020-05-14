@@ -43,11 +43,15 @@ class MenuBar:
 class StatusBar:
 
     def __init__(self, parent):
-        self.label = ttk.Label(parent, relief=tk.SUNKEN)
+        self.message = tk.StringVar()
+        self.label = ttk.Label(parent, relief=tk.SUNKEN, textvariable = self.message)
         self.label.grid(column = 0, row = 1, columnspan = 3, sticky = 'nesw')
 
     def update_message(self, message):
-        self.label.config(text = message)
+        self.message.set(message)
+
+    def clear_message(self):
+        self.message.set('')
 
 
 class ListsWithSets:
@@ -74,7 +78,7 @@ class Parent:
         MenuBar(self.gui, self.controller)
         status_bar = StatusBar(self.gui)
         status_bar.update_message('Here it is!')
-
+        status_bar.clear_message()
         frame1 = Frame(self.gui, background="grey")
         frame2 = Frame(self.gui)
         frame3 = Frame(self.gui, background='Blue')
