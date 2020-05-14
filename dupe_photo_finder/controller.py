@@ -4,9 +4,6 @@ import view
 
 class Controller:
 
-    def __init__(self):
-        view.Parent(self)
-
     @staticmethod
     def request_search(directories_list, extensions_list = ['.jpg', '.nef', '.raf']):
         Controller.validate_request_not_empty(directories_list)
