@@ -1,9 +1,10 @@
 import os
-from .fileMetadata import FileMetadata
+#from .fileMetadata import FileMetadata
 import hashlib
+import collections
 
 
-def scan_for_file_extensions(folder_paths, extensions):
+'''def scan_for_file_extensions(folder_paths, extensions):
     files_found = []
     for f in folder_paths:
         for dirpath, subdirs, files in os.walk(f):
@@ -11,8 +12,23 @@ def scan_for_file_extensions(folder_paths, extensions):
                 file_extension = os.path.splitext(x)[1].lower()
                 if file_extension in extensions:
                     file_path = os.path.join(dirpath, x)
-                    file_hash = get_file_hash(file_path)
-                    files_found.append(FileMetadata(file_path, file_hash, file_extension))
+                    #file_hash = get_file_hash(file_path)
+                    #files_found.append(FileMetadata(file_path, file_hash, file_extension))
+                    files_found.append(FileMetadata(file_path, file_extension))
+                    print('Files found matching the extensions: ' + str(len(files_found)))
+    return files_found'''
+
+def scan_for_file_extensions(folder_paths, extensions):
+    files_found = []
+    file_data = collections.namedtuple('file_data', 'path extension')
+    for f in folder_paths:
+        for dirpath, subdirs, files in os.walk(f):
+            for x in files:
+                file_extension = os.path.splitext(x)[1].lower()
+                if file_extension in extensions:
+                    file_path = os.path.join(dirpath, x)
+                    new_file = file_data(path = file_path, extension = file_extension)
+                    files_found.append(new_file)
                     print('Files found matching the extensions: ' + str(len(files_found)))
     return files_found
 

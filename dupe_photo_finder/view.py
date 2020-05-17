@@ -25,13 +25,15 @@ class MenuBar:
             self.directories_to_search.append(new_directory)
 
     def process_search_request(self):
+        progress_window = ProgressWindow(self.parent)
+        progress_window.update_message('Searching for files')
         try:
-            progress_window = ProgressWindow(self.parent)
-            progress_window.update_message('Blah')
-            self.controller.request_search(self.directories_to_search)
+            self.controller.request_search(self.directories_to_search, progress_window)
         except ValueError as e:
             messagebox.showerror('Error', str(e))
             print( str(e))
+        finally:
+            progress_window.close_window()
 
     def create_actions_menu(self, menu_bar):
         actions_menu = Menu(menu_bar, tearoff = False)

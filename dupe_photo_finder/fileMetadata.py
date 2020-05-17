@@ -1,8 +1,17 @@
 class FileMetadata:
-    def __init__(self, path, file_hash, extension):
+
+    def __init__(self, path, extension):
         self.path = path
-        self.hash = file_hash
         self.extension = extension
+        self.hash = None
+
+    @property
+    def hash(self):
+        return self.__hash
+
+    @hash.setter
+    def hash(self, val):
+        self.__hash = val
 
     def __eq__(self, other):
         if isinstance(other, FileMetadata):

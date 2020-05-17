@@ -5,9 +5,9 @@ import view
 class Controller:
 
     @staticmethod
-    def request_search(directories_list, extensions_list = ['.jpg', '.nef', '.raf']):
+    def request_search(directories_list, user_feedback, extensions_list = ['.jpg', '.nef', '.raf']):
         Controller.validate_request_not_empty(directories_list)
-        return model.find_duplicate_files_in_directories(directories_list, extensions_list)
+        return model.find_duplicate_files_in_directories(directories_list, extensions_list, user_feedback)
 
     @staticmethod
     def validate_request_not_empty(directories_list):
