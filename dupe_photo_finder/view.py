@@ -6,17 +6,17 @@ import os
 
 class MenuBar:
 
-    def __init__(self, gui, controller):
-        gui = gui
+    def __init__(self, parent, controller):
+        self.parent = parent
         self.controller = controller
         self.directories_to_search = []
-        menu_bar = Menu(gui)
+        menu_bar = Menu(parent)
         self.create_actions_menu(menu_bar)
-        gui.config(menu=menu_bar)
+        self.parent.config(menu=menu_bar)
 
     def _quit(self):
-        self.gui.quit()
-        self.gui.destroy()
+        self.parent.quit()
+        self.parent.destroy()
         sys.exit()
 
     def add_search_directory(self):
@@ -26,9 +26,12 @@ class MenuBar:
 
     def process_search_request(self):
         try:
-            self.controller.request_search(self.directories_to_search, None)
-        except Exception as e:
+            progress_window = ProgressWindow(self.parent)
+            progress_window.update_message('Blah')
+            self.controller.request_search(self.directories_to_search)
+        except ValueError as e:
             messagebox.showerror('Error', str(e))
+            print( str(e))
 
     def create_actions_menu(self, menu_bar):
         actions_menu = Menu(menu_bar, tearoff = False)
@@ -52,6 +55,31 @@ class StatusBar:
 
     def clear_message(self):
         self.message.set('')
+
+
+class ProgressWindow:
+
+    def __init__(self, parent):
+        self.parent = parent
+        self.window = tk.Toplevel()
+        self.window.title('Request Progress')
+        self.window.geometry('300x100')
+        self.window.lift()
+        self.label = tk.Label(self.window, text='')
+        self.label.pack()
+        self.parent.update_idletasks()
+
+    def update_message(self, message):
+        self.label.configure(text = message)
+        self.parent.update_idletasks()
+
+    def clear_message(self):
+        self.update_message('')
+        self.parent.update_idletasks()
+
+    def close_window(self):
+        self.window.destroy()
+        self.parent.update_idletasks()
 
 
 class ListsWithSets:
