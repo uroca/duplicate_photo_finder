@@ -69,6 +69,8 @@ class ProgressWindow:
         self.window.lift()
         self.label = tk.Label(self.window, text='')
         self.label.pack()
+        self.progress_bar = ttk.Progressbar(self.window)
+        self.progress_bar.pack()
         self.parent.update_idletasks()
 
     def update_message(self, message):
@@ -79,9 +81,19 @@ class ProgressWindow:
         self.update_message('')
         self.parent.update_idletasks()
 
+    def change_max_value_progress_bar(self, value):
+        self.progress_bar['maximum'] = value
+        self.parent.update_idletasks()
+
+    def update_progress_bar(self, value):
+        self.progress_bar['value'] = value
+        self.parent.update_idletasks()
+
     def close_window(self):
         self.window.destroy()
         self.parent.update_idletasks()
+
+
 
 
 class ListsWithSets:
