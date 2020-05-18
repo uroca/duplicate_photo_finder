@@ -9,7 +9,7 @@ def find_duplicate_files_in_directories(directories_list, extensions_list, user_
     user_feedback.update_message(''.join(['Local files found: ', str(len(local_files_found))]))
     metadata_list = retrieve_file_metadata(local_files_found, user_feedback)
     duplicates_found = scan_metadata_list_for_duplicates(metadata_list)
-    printDuplicates.print_terminal(metadata_list) # to remove functionality when gui is implemented
+    printDuplicates.print_terminal(duplicates_found) # to remove functionality when gui is implemented
     return duplicates_found
 
 def retrieve_file_metadata (list_of_files, user_feedback):

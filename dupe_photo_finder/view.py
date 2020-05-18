@@ -68,9 +68,9 @@ class ProgressWindow:
         self.window.geometry('300x100')
         self.window.lift()
         self.label = tk.Label(self.window, text='')
-        self.label.pack()
+        self.label.pack(padx=12, pady=12)
         self.progress_bar = ttk.Progressbar(self.window)
-        self.progress_bar.pack()
+        self.progress_bar.pack(fill='x', padx=12, pady=12)
         self.parent.update_idletasks()
 
     def update_message(self, message):
