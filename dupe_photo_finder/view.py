@@ -6,9 +6,10 @@ import os
 
 class MenuBar:
 
-    def __init__(self, parent, controller):
+    def __init__(self, parent, controller, sets_of_duplicates):
         self.parent = parent
         self.controller = controller
+        self.listbox_dupe_sets = sets_of_duplicates
         self.directories_to_search = []
         menu_bar = Menu(parent)
         self.create_actions_menu(menu_bar)
@@ -27,13 +28,19 @@ class MenuBar:
     def process_search_request(self):
         progress_window = ProgressWindow(self.parent)
         progress_window.update_message('Searching for files')
+
         try:
-            self.controller.request_search(self.directories_to_search, progress_window)
+            duplicate_sets = self.controller.request_search(self.directories_to_search, progress_window)
         except ValueError as e:
             messagebox.showerror('Error', str(e))
             print( str(e))
         finally:
             progress_window.close_window()
+
+        if duplicate_sets and len(duplicate_sets)>0:
+            for index in range(0, len(duplicate_sets)):
+                self.listbox_dupe_sets.add_item_to_list(index)
+
 
     def create_actions_menu(self, menu_bar):
         actions_menu = Menu(menu_bar, tearoff = False)
@@ -99,11 +106,15 @@ class ProgressWindow:
 class ListsWithSets:
 
     def __init__(self, parent):
+        self.parent = parent
         self.listbox = tk.Listbox(parent, borderwidth=0, highlightthickness=0, background="grey")
         bold = tk.font.Font(weight='bold')
         self.listbox.config(font=bold)
-        self.listbox.insert('end','Item 2')
         self.listbox.pack(side='top')
+
+    def add_item_to_list(self, item):
+        self.listbox.insert('end', item)
+        self.parent.update_idletasks()
 
 
 class Parent:
@@ -117,15 +128,15 @@ class Parent:
         self.gui.grid_columnconfigure(0, weight=1)
         self.gui.grid_columnconfigure(1, weight=6)
         self.gui.grid_columnconfigure(2, weight=6)
-        MenuBar(self.gui, self.controller)
-        status_bar = StatusBar(self.gui)
-        status_bar.update_message('Here it is!')
-        status_bar.clear_message()
         frame1 = Frame(self.gui, background="grey")
         frame2 = Frame(self.gui)
         frame3 = Frame(self.gui, background='Blue')
         frame1.grid(row=0, column=0, sticky="nsew")
         frame2.grid(row=0, column=1, sticky="nsew")
         frame3.grid(row=0, column=2, sticky="nsew")
-        ListsWithSets(frame1)
+        sets_of_duplicates = ListsWithSets(frame1)
+        MenuBar(self.gui, self.controller, sets_of_duplicates)
+        status_bar = StatusBar(self.gui)
+        status_bar.update_message('Here it is!')
+        status_bar.clear_message()
         self.gui.mainloop()

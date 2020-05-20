@@ -18,6 +18,7 @@ def retrieve_file_metadata (list_of_files, user_feedback):
     for f in list_of_files:
         file_metadata = FileMetadata(f.path, f.extension)
         file_metadata.hash = localSys.get_file_hash(f.path)
+        file_metadata.last_modified = localSys.get_last_modification_time(f.path)
         list_file_metadata.append(file_metadata)
         user_feedback.update_message(''.join(['Retrieved ', str(len(list_file_metadata)), ' of a total of ',
                                               str(len(list_of_files)), ' files']))

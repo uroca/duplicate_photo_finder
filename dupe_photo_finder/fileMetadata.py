@@ -1,17 +1,19 @@
+import enum
+
+class UserDecision(enum.Enum):
+    undecided = 0
+    keep = 1
+    discard = 2
+
+
 class FileMetadata:
 
     def __init__(self, path, extension):
         self.path = path
         self.extension = extension
         self.hash = None
-
-    @property
-    def hash(self):
-        return self.__hash
-
-    @hash.setter
-    def hash(self, val):
-        self.__hash = val
+        self.last_modified = None
+        self.user_decision_enum = UserDecision.undecided
 
     def __eq__(self, other):
         if isinstance(other, FileMetadata):
