@@ -6,7 +6,6 @@ class Controller:
 
     def __init__(self):
         self.directories_to_search = []
-        self.duplicate_result_sets = []
 
     def add_directory_to_search(self, directory):
         self.directories_to_search.append(directory)
