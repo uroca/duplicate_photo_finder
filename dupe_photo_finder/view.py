@@ -6,11 +6,10 @@ import os
 
 class MenuBar:
 
-    def __init__(self, parent, controller, sets_of_duplicates):
+    def __init__(self, parent, controller, listbox_dupe_sets):
         self.parent = parent
         self.controller = controller
-        self.listbox_dupe_sets = sets_of_duplicates
-        self.directories_to_search = []
+        self.listbox_dupe_sets = listbox_dupe_sets
         menu_bar = Menu(parent)
         self.create_actions_menu(menu_bar)
         self.parent.config(menu=menu_bar)
@@ -23,14 +22,14 @@ class MenuBar:
     def add_search_directory(self):
         new_directory = filedialog.askdirectory(title = 'What directory should I search for duplicate photos?')
         if new_directory:
-            self.directories_to_search.append(new_directory)
+            self.controller.add_directory_to_search(new_directory)
 
     def process_search_request(self):
         progress_window = ProgressWindow(self.parent)
         progress_window.update_message('Searching for files')
 
         try:
-            duplicate_sets = self.controller.request_search(self.directories_to_search, progress_window)
+            duplicate_sets = self.controller.request_search(progress_window)
         except ValueError as e:
             messagebox.showerror('Error', str(e))
             print( str(e))
@@ -101,15 +100,26 @@ class ProgressWindow:
         self.parent.update_idletasks()
 
 
-
-
 class ListsWithSets:
+
+    def __init__(self, parent, listbox_of_files):
+        self.parent = parent
+        self.listbox_of_files = listbox_of_files
+        self.listbox = tk.Listbox(parent, selectmode = 'browse', borderwidth=0, highlightthickness=0, background='grey')
+        bold = tk.font.Font(weight='bold')
+        self.listbox.config(font=bold)
+        self.listbox.pack(side='top')
+
+    def add_item_to_list(self, item):
+        self.listbox.insert('end', item)
+        self.parent.update_idletasks()
+
+
+class ListboxFiles:
 
     def __init__(self, parent):
         self.parent = parent
-        self.listbox = tk.Listbox(parent, borderwidth=0, highlightthickness=0, background="grey")
-        bold = tk.font.Font(weight='bold')
-        self.listbox.config(font=bold)
+        self.listbox = tk.Listbox(parent, selectmode = 'single', borderwidth=0, highlightthickness=0, background='Blue')
         self.listbox.pack(side='top')
 
     def add_item_to_list(self, item):
@@ -134,8 +144,9 @@ class Parent:
         frame1.grid(row=0, column=0, sticky="nsew")
         frame2.grid(row=0, column=1, sticky="nsew")
         frame3.grid(row=0, column=2, sticky="nsew")
-        sets_of_duplicates = ListsWithSets(frame1)
-        MenuBar(self.gui, self.controller, sets_of_duplicates)
+        listbox_of_files = ListboxFiles(frame2)
+        listbox_dupe_sets = ListsWithSets(frame1, listbox_of_files)
+        MenuBar(self.gui, self.controller, listbox_dupe_sets)
         status_bar = StatusBar(self.gui)
         status_bar.update_message('Here it is!')
         status_bar.clear_message()
