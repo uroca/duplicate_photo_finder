@@ -6,10 +6,11 @@ import os
 
 class MenuBar:
 
-    def __init__(self, parent, controller, listbox_dupe_sets):
+    def __init__(self, parent, controller, listbox_dupe_sets, status_bar):
         self.parent = parent
         self.controller = controller
         self.listbox_dupe_sets = listbox_dupe_sets
+        self.status_bar = status_bar
         menu_bar = Menu(parent)
         self.create_actions_menu(menu_bar)
         self.parent.config(menu=menu_bar)
@@ -23,11 +24,12 @@ class MenuBar:
         new_directory = filedialog.askdirectory(title = 'What directory should I search for duplicate photos?')
         if new_directory:
             self.controller.add_directory_to_search(new_directory)
+            self.status_bar.update_message("Directories to search: " + str(len(self.controller.directories_to_search)))
 
     def process_search_request(self):
         progress_window = ProgressWindow(self.parent)
         progress_window.update_message('Searching for files')
-
+        self.status_bar.update_message('Searching for duplicates')
         try:
             duplicate_sets = self.controller.request_search(progress_window)
         except ValueError as e:
@@ -36,6 +38,7 @@ class MenuBar:
         finally:
             progress_window.close_window()
 
+        self.status_bar.clear_message()
         if duplicate_sets and len(duplicate_sets)>0:
             for index in range(0, len(duplicate_sets)):
                 self.listbox_dupe_sets.add_item_to_list(index)
@@ -144,10 +147,8 @@ class Parent:
         frame1.grid(row=0, column=0, sticky="nsew")
         frame2.grid(row=0, column=1, sticky="nsew")
         frame3.grid(row=0, column=2, sticky="nsew")
+        status_bar = StatusBar(self.gui)
         listbox_of_files = ListboxFiles(frame2)
         listbox_dupe_sets = ListsWithSets(frame1, listbox_of_files)
-        MenuBar(self.gui, self.controller, listbox_dupe_sets)
-        status_bar = StatusBar(self.gui)
-        status_bar.update_message('Here it is!')
-        status_bar.clear_message()
+        MenuBar(self.gui, self.controller, listbox_dupe_sets, status_bar)
         self.gui.mainloop()
