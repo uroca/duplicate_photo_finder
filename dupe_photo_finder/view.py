@@ -107,6 +107,12 @@ class ListsWithSets:
         self.listbox.config(font=bold)
         self.listbox.pack(side='top')
 
+        def cursor_selection(evt):
+            value = str(self.listbox.curselection())
+            print(value)
+
+        self.listbox.bind('<<ListboxSelect>>', cursor_selection)
+
     def add_item_to_list(self, item):
         self.listbox.insert('end', item)
         self.parent.frame1.update_idletasks()
@@ -116,12 +122,8 @@ class ListboxFiles:
 
     def __init__(self, parent):
         self.parent = parent
-        self.listbox = tk.Listbox(self.parent.frame2, selectmode = 'single', borderwidth=0, highlightthickness=0, background='Blue')
-        self.listbox.pack(side='top')
-
-    def add_item_to_list(self, item):
-        self.listbox.insert('end', item)
-        self.parent.frame2.update_idletasks()
+        self.treeview = ttk.Treeview(self.parent.frame2)
+        self.treeview.pack(fill='both')
 
 
 class Parent:
