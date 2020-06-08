@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk, Menu, scrolledtext, filedialog, messagebox, Label, Frame, font
 import sys
 import os
+import platform
 
 
 class MenuBar:
@@ -108,8 +109,8 @@ class ListsWithSets:
         self.listbox.pack(side='top')
 
         def cursor_selection(evt):
-            value = str(self.listbox.curselection())
-            print(value)
+            value = self.listbox.curselection()[0]
+            self.parent.treeview_of_files.display_duplicate_group(value)
 
         self.listbox.bind('<<ListboxSelect>>', cursor_selection)
 
@@ -118,12 +119,29 @@ class ListsWithSets:
         self.parent.frame1.update_idletasks()
 
 
-class ListboxFiles:
+class TreeviewFiles:
 
     def __init__(self, parent):
         self.parent = parent
-        self.treeview = ttk.Treeview(self.parent.frame2)
+        self.treeview = ttk.Treeview(self.parent.frame2, show='tree headings')
         self.treeview.pack(fill='both')
+        self.treeview['columns'] = ("action")
+        self.treeview.heading("#0", text="Name")
+        self.treeview.heading("action", text="Action")
+        self.treeview.column("#0", anchor='w', stretch=tk.YES, width = 150, minwidth= 80)
+        self.treeview.column("action",  anchor='e', stretch=tk.NO, width = 70, minwidth= 70)
+        # TODO: by default all leaves are visible in the Treeview
+
+    def display_duplicate_group(self, duplicate_group_number):
+        self.clear_treeview()
+        relative_paths = self.parent.controller.get_paths_of_set_of_duplicates(duplicate_group_number)
+        for r in relative_paths:
+            self.treeview.insert(r.parent, 'end', iid=r.index, text=r.text, open = True)
+        self.parent.gui.update_idletasks()
+
+    def clear_treeview(self):
+        for row in self.treeview.get_children():
+            self.treeview.delete(row)
 
 
 class Parent:
@@ -148,7 +166,7 @@ class Parent:
         self.frame3.grid(row=0, column=2, sticky="nsew")
 
         self.status_bar = StatusBar(self.gui)
-        self.listbox_of_files = ListboxFiles(self)
+        self.treeview_of_files = TreeviewFiles(self)
         self.listbox_dupe_sets = ListsWithSets(self)
         self.menu_bar = MenuBar(self)
 
