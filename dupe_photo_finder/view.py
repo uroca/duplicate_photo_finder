@@ -11,6 +11,8 @@ class MenuBar:
         self.parent = parent
         menu_bar = Menu(self.parent.gui)
         self.create_actions_menu(menu_bar)
+        self.create_results_menu(menu_bar)
+        self.create_help_menu(menu_bar)
         self.parent.gui.config(menu=menu_bar)
 
     def _quit(self):
@@ -40,14 +42,30 @@ class MenuBar:
                 self.parent.listbox_dupe_sets.add_item_to_list(index)
 
 
+    @staticmethod
+    def feature_not_done_window():
+        not_done_window = tk.messagebox.showinfo(title="This feature isn't finished",
+                                                 message="We're working on it!")
+
     def create_actions_menu(self, menu_bar):
         actions_menu = Menu(menu_bar, tearoff = False)
         actions_menu.add_command (label = 'Add Directory', command = self.add_search_directory)
         actions_menu.add_command (label = 'Search for duplicates', command = self.process_search_request)
         actions_menu.add_separator()
         actions_menu.add_command (label = 'Exit', command = self._quit)
+        menu_bar.add_cascade(menu=actions_menu, label='Actions')
 
-        menu_bar.add_cascade(menu = actions_menu, label = 'Actions')
+    def create_results_menu(self, menu_bar):
+        results_menu = Menu(menu_bar, tearoff=False)
+        results_menu.add_command(label='Save the results', command=MenuBar.feature_not_done_window)
+        results_menu.add_command(label='Load the results', command=MenuBar.feature_not_done_window)
+        menu_bar.add_cascade(menu=results_menu, label='Results')
+
+    def create_help_menu(self, menu_bar):
+        help_menu = Menu(menu_bar, tearoff=False)
+        help_menu.add_command(label='How does it work', command=MenuBar.feature_not_done_window)
+        help_menu.add_command(label='About', command=MenuBar.feature_not_done_window)
+        menu_bar.add_cascade(menu=help_menu, label='Help')
 
 
 class StatusBar:
@@ -103,6 +121,8 @@ class ListsWithSets:
 
     def __init__(self, parent):
         self.parent = parent
+        self.label = ttk.Label(self.parent.frame1, text='Groups of duplicate photos')
+        self.label.pack(side='top')
         self.listbox = tk.Listbox(self.parent.frame1, selectmode = 'browse', borderwidth=0, highlightthickness=0, background='grey')
         bold = tk.font.Font(weight='bold')
         self.listbox.config(font=bold)
@@ -123,14 +143,15 @@ class TreeviewFiles:
 
     def __init__(self, parent):
         self.parent = parent
+        self.label = ttk.Label(self.parent.frame2, text='Location of the duplicate photos')
+        self.label.pack(side='top')
         self.treeview = ttk.Treeview(self.parent.frame2, show='tree headings')
-        self.treeview.pack(fill='both')
+        self.treeview.pack(side='top', fill='both')
         self.treeview['columns'] = ("action")
         self.treeview.heading("#0", text="Name")
         self.treeview.heading("action", text="Action")
         self.treeview.column("#0", anchor='w', stretch=tk.YES, width = 150, minwidth= 80)
         self.treeview.column("action",  anchor='e', stretch=tk.NO, width = 70, minwidth= 70)
-        # TODO: by default all leaves are visible in the Treeview
 
     def display_duplicate_group(self, duplicate_group_number):
         self.clear_treeview()
